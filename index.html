@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORS Bypass API Fetcher</title>
+    <title>API Fetcher</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -56,7 +56,7 @@
             color: #444;
         }
 
-        input, select {
+        input {
             width: 100%;
             padding: 1rem;
             border: 2px solid #e1e8ed;
@@ -66,7 +66,7 @@
             box-sizing: border-box;
         }
 
-        input:focus, select:focus {
+        input:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
@@ -94,19 +94,6 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
-        }
-
-        .proxy-info {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .proxy-info strong {
-            color: #856404;
         }
 
         .result-section {
@@ -222,138 +209,40 @@
         .copy-btn:hover {
             background: #218838;
         }
-
-        .method-group {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .headers-section {
-            margin-top: 1rem;
-        }
-
-        .header-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 0.5rem;
-            align-items: end;
-            margin-bottom: 0.5rem;
-        }
-
-        .add-header-btn {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .remove-header-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.75rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .body-section {
-            margin-top: 1rem;
-        }
-
-        textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: 'Courier New', monospace;
-            min-height: 100px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>🌐 CORS Bypass API Fetcher</h1>
-        <p>Fetch data from any API bypassing CORS restrictions</p>
+        <h1>🔌 API Fetcher</h1>
+        <p>Fetch data from any API with access token</p>
     </div>
 
     <div class="form-container">
-        <div class="proxy-info">
-            <strong>CORS Bypass:</strong> This tool uses multiple proxy servers to bypass CORS restrictions.
-            If one proxy fails, it automatically tries the next one.
-        </div>
-
         <div class="example-box">
             <strong>Examples:</strong><br>
-            • Your API: https://alphagroup.staging.qbiltrade.com/api/v1/orders<br>
-            • GitHub API: https://api.github.com/user<br>
-            • Any REST API that's blocked by CORS
+            • GitHub API: https://api.github.com/user (with your GitHub token)<br>
+            • JSONPlaceholder: https://jsonplaceholder.typicode.com/posts/1 (no token needed)
         </div>
 
         <form id="api-form">
-            <div class="method-group">
-                <div class="form-group">
-                    <label for="method">HTTP Method</label>
-                    <select id="method">
-                        <option value="GET">GET</option>
-                        <option value="POST">POST</option>
-                        <option value="PUT">PUT</option>
-                        <option value="DELETE">DELETE</option>
-                        <option value="PATCH">PATCH</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="api-url">API Endpoint URL</label>
-                    <input
-                            type="url"
-                            id="api-url"
-                            placeholder="https://api.example.com/data"
-                            required
-                    >
-                </div>
+            <div class="form-group">
+                <label for="api-url">API Endpoint URL</label>
+                <input
+                        type="url"
+                        id="api-url"
+                        placeholder="https://api.example.com/data"
+                        required
+                >
             </div>
 
             <div class="form-group">
-                <label for="proxy-select">Proxy Server</label>
-                <select id="proxy-select">
-                    <option value="auto">Auto (try all proxies)</option>
-                    <option value="https://api.allorigins.win/raw?url=">AllOrigins</option>
-                    <option value="https://cors-anywhere.herokuapp.com/">CORS Anywhere</option>
-                    <option value="https://api.codetabs.com/v1/proxy?quest=">CodeTabs</option>
-                    <option value="https://thingproxy.freeboard.io/fetch/">ThingProxy</option>
-                </select>
-            </div>
-
-            <div class="headers-section">
-                <label>Custom Headers</label>
-                <div id="headers-container">
-                    <div class="header-row">
-                        <input type="text" placeholder="Header name (e.g., Authorization)" class="header-key">
-                        <input type="text" placeholder="Header value (e.g., Bearer token)" class="header-value">
-                        <button type="button" class="add-header-btn" onclick="addHeaderRow()">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="body-section" id="body-section" style="display: none;">
-                <label for="request-body">Request Body (JSON)</label>
-                <textarea id="request-body" placeholder='{"key": "value"}'></textarea>
+                <label for="access-token">Access Token (optional)</label>
+                <input
+                        type="password"
+                        id="access-token"
+                        placeholder="your-access-token-here"
+                >
             </div>
 
             <button type="submit" class="btn" id="fetch-btn">
@@ -366,7 +255,7 @@
                 <h3>API Response</h3>
                 <div>
                     <span id="status-badge" class="status-badge">200 OK</span>
-                    <button class="copy-btn" onclick="copyResult()">Copy Result</button>
+                    <button class="copy-btn" onclick="copyResult()">Copy JSON</button>
                 </div>
             </div>
             <div id="result-data" class="result-data"></div>
@@ -375,77 +264,25 @@
 </div>
 
 <script>
-    const PROXY_SERVERS = [
-        'https://api.allorigins.win/raw?url=',
-        'https://cors-anywhere.herokuapp.com/',
-        'https://api.codetabs.com/v1/proxy?quest=',
-        'https://thingproxy.freeboard.io/fetch/'
-    ];
-
-    let headerCount = 1;
-
-    // Show/hide body section based on method
-    document.getElementById('method').addEventListener('change', function() {
-        const method = this.value;
-        const bodySection = document.getElementById('body-section');
-        if (['POST', 'PUT', 'PATCH'].includes(method)) {
-            bodySection.style.display = 'block';
-        } else {
-            bodySection.style.display = 'none';
-        }
-    });
-
     document.getElementById('api-form').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const url = document.getElementById('api-url').value.trim();
-        const method = document.getElementById('method').value;
-        const proxySelect = document.getElementById('proxy-select').value;
+        const token = document.getElementById('access-token').value.trim();
 
         if (!url) {
             alert('Please enter an API URL');
             return;
         }
 
-        await fetchAPIData(url, method, proxySelect);
+        await fetchAPIData(url, token);
     });
 
-    function addHeaderRow() {
-        headerCount++;
-        const container = document.getElementById('headers-container');
-        const headerRow = document.createElement('div');
-        headerRow.className = 'header-row';
-        headerRow.innerHTML = `
-            <input type="text" placeholder="Header name" class="header-key">
-            <input type="text" placeholder="Header value" class="header-value">
-            <button type="button" class="remove-header-btn" onclick="removeHeaderRow(this)">−</button>
-        `;
-        container.appendChild(headerRow);
-    }
-
-    function removeHeaderRow(button) {
-        button.parentElement.remove();
-    }
-
-    function getCustomHeaders() {
-        const headers = {};
-        const headerRows = document.querySelectorAll('.header-row');
-
-        headerRows.forEach(row => {
-            const key = row.querySelector('.header-key').value.trim();
-            const value = row.querySelector('.header-value').value.trim();
-            if (key && value) {
-                headers[key] = value;
-            }
-        });
-
-        return headers;
-    }
-
-    async function fetchAPIData(url, method, proxySelect) {
+    async function fetchAPIData(url, token) {
         const fetchBtn = document.getElementById('fetch-btn');
         const resultSection = document.getElementById('result-section');
         const resultData = document.getElementById('result-data');
+        const statusBadge = document.getElementById('status-badge');
 
         // Show loading
         fetchBtn.disabled = true;
@@ -455,112 +292,60 @@
         resultData.innerHTML = '<div class="loading"><div class="spinner"></div>Loading API data...</div>';
 
         const startTime = Date.now();
-        const customHeaders = getCustomHeaders();
-        const requestBody = document.getElementById('request-body').value.trim();
 
         try {
-            let result;
-
-            if (proxySelect === 'auto') {
-                result = await tryMultipleProxies(url, method, customHeaders, requestBody);
-            } else {
-                result = await makeAPICall(url, method, customHeaders, requestBody, proxySelect);
-            }
-
+            // In production, this would call your serverless function
+            // For demo, we'll make the API call directly
+            const result = await makeAPICall(url, token);
             const endTime = Date.now();
             const responseTime = endTime - startTime;
+
+            // Display success result
             displayResult(result, responseTime, true);
 
         } catch (error) {
             const endTime = Date.now();
             const responseTime = endTime - startTime;
+
+            // Display error result
             displayResult(error, responseTime, false);
+
         } finally {
+            // Reset button
             fetchBtn.disabled = false;
             fetchBtn.innerHTML = 'Fetch API Data';
         }
     }
 
-    async function tryMultipleProxies(url, method, headers, body) {
-        let lastError;
-
-        for (const proxy of PROXY_SERVERS) {
-            try {
-                console.log(`Trying proxy: ${proxy}`);
-                const result = await makeAPICall(url, method, headers, body, proxy);
-                result.proxy = proxy;
-                return result;
-            } catch (error) {
-                console.log(`Proxy ${proxy} failed:`, error);
-                lastError = error;
-                continue;
-            }
-        }
-
-        // If all proxies fail, try direct request as last resort
-        try {
-            console.log('Trying direct request...');
-            const result = await makeAPICall(url, method, headers, body, '');
-            result.proxy = 'direct';
-            return result;
-        } catch (error) {
-            console.log('Direct request failed:', error);
-            lastError.message = 'All proxy servers failed. CORS restrictions could not be bypassed.';
-            throw lastError;
-        }
-    }
-
-    async function makeAPICall(url, method, customHeaders, body, proxy) {
-        const targetUrl = proxy ? proxy + encodeURIComponent(url) : url;
-
+    async function makeAPICall(url, token) {
         const headers = {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            ...customHeaders
+            'Content-Type': 'application/json'
         };
 
-        const requestOptions = {
-            method: method,
-            headers: headers
-        };
-
-        // Add body for POST, PUT, PATCH requests
-        if (['POST', 'PUT', 'PATCH'].includes(method) && body) {
-            try {
-                JSON.parse(body); // Validate JSON
-                requestOptions.body = body;
-            } catch (e) {
-                throw new Error('Invalid JSON in request body');
-            }
+        // Add authorization header if token is provided
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
         }
 
-        const response = await fetch(targetUrl, requestOptions);
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: headers
+        });
 
         const result = {
             status: response.status,
             statusText: response.statusText,
             url: url,
-            proxy: proxy || 'direct',
-            method: method,
             data: null
         };
 
-        // Try to parse response
+        // Try to parse JSON response
         const contentType = response.headers.get('content-type');
-        try {
-            if (contentType && contentType.includes('application/json')) {
-                result.data = await response.json();
-            } else {
-                const text = await response.text();
-                // Try to parse as JSON even if content-type is not set correctly
-                try {
-                    result.data = JSON.parse(text);
-                } catch {
-                    result.data = text;
-                }
-            }
-        } catch (e) {
-            result.data = 'Could not parse response';
+        if (contentType && contentType.includes('application/json')) {
+            result.data = await response.json();
+        } else {
+            result.data = await response.text();
         }
 
         if (!response.ok) {
@@ -575,20 +360,17 @@
         const resultData = document.getElementById('result-data');
 
         // Update status badge
-        statusBadge.textContent = `${result.status || 'Error'} ${result.statusText || ''}`;
+        statusBadge.textContent = `${result.status} ${result.statusText}`;
         statusBadge.className = `status-badge ${isSuccess ? 'status-success' : 'status-error'}`;
 
         // Prepare display data
         const displayData = {
             success: isSuccess,
-            status: result.status || 'Error',
-            statusText: result.statusText || 'Request failed',
-            method: result.method || 'Unknown',
-            url: result.url || 'Unknown',
-            proxy: result.proxy || 'direct',
+            status: result.status,
+            statusText: result.statusText,
             responseTime: `${responseTime}ms`,
             timestamp: new Date().toISOString(),
-            data: result.data || result.message || 'No data'
+            data: result.data
         };
 
         // Display formatted JSON
